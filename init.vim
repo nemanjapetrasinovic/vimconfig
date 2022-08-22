@@ -6,6 +6,7 @@ set listchars=tab:▸\ ,eol:¬,trail:·
 set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
 set expandtab
 syntax on
+set cursorline
 
 call plug#begin('~/.vim/plugged')
 Plug 'scrooloose/nerdtree'
@@ -69,3 +70,6 @@ require'lspconfig'.rust_analyzer.setup{}
 require'lspconfig'.vuels.setup{}
 require'lspconfig'.eslint.setup{}
 EOF
+
+set updatetime=500
+autocmd CursorHold * lua vim.diagnostic.open_float()
