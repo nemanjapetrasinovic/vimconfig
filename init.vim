@@ -60,6 +60,12 @@ nnoremap gr :Rg <cword><CR>
 nnoremap <leader>r :Rg<CR>
 nnoremap <leader>R :Rg <cword><CR>
 
+let g:LanguageClient_serverCommands = {
+    \ 'vue': ['vls']
+    \ }
+
 lua << EOF
 require'lspconfig'.rust_analyzer.setup{}
+require'lspconfig'.vuels.setup{}
+require'lspconfig'.eslint.setup{}
 EOF
