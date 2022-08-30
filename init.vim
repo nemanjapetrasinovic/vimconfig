@@ -31,6 +31,8 @@ Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 
 Plug 'kien/rainbow_parentheses.vim'
+
+Plug 'tomtom/tcomment_vim'
 call plug#end()
 
 "Toggle Nerd Tree
@@ -73,3 +75,9 @@ EOF
 
 set updatetime=500
 autocmd CursorHold * lua vim.diagnostic.open_float()
+
+" system clipboard usage in vim (default '+' register)
+set clipboard=unnamed
+set clipboard=unnamedplus
+
+nnoremap <silent> ga    <cmd>lua vim.lsp.buf.code_action()<CR>
