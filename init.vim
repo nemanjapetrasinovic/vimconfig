@@ -59,9 +59,9 @@ if executable('rg')
     set grepformat=%f:%l:%c:%m
 endif
 
-nnoremap gr :Rg <cword><CR>
+nnoremap gr :Ggrep <C-R><C-W><CR>
 nnoremap <leader>r :Rg<CR>
-nnoremap <leader>R :Rg <cword><CR>
+nnoremap <leader>R :Rg <C-R><C-W><CR>
 
 let g:LanguageClient_serverCommands = {
     \ 'vue': ['vls']
