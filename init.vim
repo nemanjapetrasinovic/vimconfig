@@ -20,31 +20,41 @@ Plug 'rust-lang/rust.vim'
 Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
 Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
 
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+"Plug 'vim-airline/vim-airline'
+"Plug 'vim-airline/vim-airline-themes'
+
+Plug 'nvim-lualine/lualine.nvim'
+Plug 'kyazdani42/nvim-web-devicons'
 
 Plug 'sonph/onehalf', { 'rtp': 'vim' }
 
 Plug 'tpope/vim-fugitive'
 
-Plug 'junegunn/fzf'
-Plug 'junegunn/fzf.vim'
+"Plug 'junegunn/fzf'
+"Plug 'junegunn/fzf.vim'
+
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 
 Plug 'kien/rainbow_parentheses.vim'
 
 Plug 'tomtom/tcomment_vim'
+
+Plug 'puremourning/vimspector'
+Plug 'EdenEast/nightfox.nvim'
 call plug#end()
 
 "Toggle Nerd Tree
 nnoremap <C-n> :NERDTreeToggle<CR>
 
-colorscheme onehalfdark
+colorscheme nordfox
 let g:airline_theme='onehalfdark'
 let g:airline#extensions#tabline#enabled = 1
 
-nnoremap <leader>F :Files<CR>
-nnoremap <leader>L :Buffers<CR>
-nnoremap <leader>G :GFiles?<CR>
+"nnoremap <leader>F :Files<CR>
+nnoremap <leader>F <cmd>Telescope find_files<CR>
+nnoremap <leader>L <cmd>Telescope buffers<CR>
+nnoremap <leader>G <cmd>Telescope git_files<CR>
 
 let g:rbpt_max = 16
 let g:rbpt_loadcmd_toggle = 0
@@ -73,6 +83,12 @@ require'lspconfig'.vuels.setup{}
 require'lspconfig'.eslint.setup{}
 EOF
 
+lua << END
+require'lualine'.setup {
+    options = { theme = 'nordfox' }
+}
+END
+
 set updatetime=500
 autocmd CursorHold * lua vim.diagnostic.open_float()
 
@@ -81,3 +97,12 @@ set clipboard=unnamed
 set clipboard=unnamedplus
 
 nnoremap <silent> ga    <cmd>lua vim.lsp.buf.code_action()<CR>
+
+" Debug
+"
+nnoremap <silent> D    :call vimspector#Launch()<CR>
+nnoremap <silent> db   :call vimspector#ToggleBreakpoint()<CR>
+nnoremap <F5>          :call vimspector#Continue()<CR>
+nnoremap <F10>         :call vimspector#StepOver()<CR>
+nnoremap <F11>         :call vimspector#StepInto()<CR>
+nnoremap Č  :
