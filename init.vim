@@ -81,7 +81,7 @@ require'nightfox'.setup{palettes = {nordfox = { bg3 = "#39404f" }}}
 END
 
 set updatetime=500
-autocmd CursorHold * lua vim.diagnostic.open_float()
+autocmd CursorHold * lua vim.diagnostic.open_float({focus = false})
 
 " system clipboard usage in vim (default '+' register)
 set clipboard=unnamed
