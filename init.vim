@@ -8,6 +8,7 @@ set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
 set expandtab
 syntax on
 set cursorline
+set mouse=
 
 call plug#begin('~/.vim/plugged')
 Plug 'scrooloose/nerdtree'
@@ -20,6 +21,7 @@ Plug 'rust-lang/rust.vim'
 
 Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
 Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
+Plug 'ms-jpq/coq.thirdparty', {'branch': '3p'}
 
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
@@ -66,8 +68,25 @@ let g:LanguageClient_serverCommands = {
 
 lua << EOF
 require'lspconfig'.rust_analyzer.setup{}
-require'lspconfig'.vuels.setup{}
+-- require'lspconfig'.vuels.setup{}
 require'lspconfig'.eslint.setup{}
+require'lspconfig'.tsserver.setup{}
+
+require'lspconfig'.volar.setup{
+  filetypes = {'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue', 'json'},
+  typescrypt = {
+    tsdk = '/usr/lib/node_modules/typescript/lib'
+  }
+}
+EOF
+
+lua << EOF
+vim.g.coq_settings = {
+  ["auto_start"] = true,
+  ["clients.tree_sitter.enabled"] = false,
+}
+
+require("coq")
 EOF
 
 lua << END
@@ -103,7 +122,7 @@ colorscheme nordfox
 lua << END
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all" (the five listed parsers should always be installed)
-  ensure_installed = { "c", "lua", "rust", "javascript", "typescript" },
+  ensure_installed = { "c", "lua", "rust", "javascript", "typescript", "vimdoc", "comment" },
 
   -- Install parsers synchronously (only applied to `ensure_installed`)
   sync_install = false,
