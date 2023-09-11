@@ -19,9 +19,17 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'simrat39/rust-tools.nvim'
 Plug 'rust-lang/rust.vim'
 
-Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
-Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
-Plug 'ms-jpq/coq.thirdparty', {'branch': '3p'}
+" LSP Support
+Plug 'neovim/nvim-lspconfig'             " Required
+Plug 'williamboman/mason.nvim',          " Optional
+Plug 'williamboman/mason-lspconfig.nvim' " Optional
+
+" Autocompletion
+Plug 'hrsh7th/nvim-cmp'     " Required
+Plug 'hrsh7th/cmp-nvim-lsp' " Required
+Plug 'L3MON4D3/LuaSnip'     " Required
+
+Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v2.x'}
 
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
@@ -39,6 +47,7 @@ Plug 'puremourning/vimspector'
 Plug 'EdenEast/nightfox.nvim'
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'majutsushi/tagbar'
 call plug#end()
 
 "Toggle Nerd Tree
@@ -62,31 +71,36 @@ nnoremap gr :Ggrep <C-R><C-W><CR>
 "nnoremap <leader>r :Rg<CR>
 "nnoremap <leader>R :Rg <C-R><C-W><CR>
 
-let g:LanguageClient_serverCommands = {
-    \ 'vue': ['vls']
-    \ }
+lua <<EOF
+local lsp = require('lsp-zero').preset({})
 
-lua << EOF
-require'lspconfig'.rust_analyzer.setup{}
--- require'lspconfig'.vuels.setup{}
-require'lspconfig'.eslint.setup{}
-require'lspconfig'.tsserver.setup{}
+lsp.on_attach(function(client, bufnr)
+  -- see :help lsp-zero-keybindings
+  -- to learn the available actions
+  lsp.default_keymaps({buffer = bufnr})
+end)
 
-require'lspconfig'.volar.setup{
-  filetypes = {'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue', 'json'},
-  typescrypt = {
-    tsdk = '/usr/lib/node_modules/typescript/lib'
+-- (Optional) Configure lua language server for neovim
+require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+
+lsp.setup()
+
+local cmp = require('cmp')
+local cmp_action = require('lsp-zero').cmp_action()
+
+cmp.setup({
+  mapping = {
+    -- `Enter` key to confirm completion
+    ['<CR>'] = cmp.mapping.confirm({select = false}),
+
+    -- Ctrl+Space to trigger completion menu
+    ['<C-Space>'] = cmp.mapping.complete(),
+
+    -- Navigate between snippet placeholder
+    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
   }
-}
-EOF
-
-lua << EOF
-vim.g.coq_settings = {
-  ["auto_start"] = true,
-  ["clients.tree_sitter.enabled"] = false,
-}
-
-require("coq")
+})
 EOF
 
 lua << END
