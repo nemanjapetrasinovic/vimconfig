@@ -130,6 +130,7 @@ nnoremap <F5>          :call vimspector#Continue()<CR>
 nnoremap <F10>         :call vimspector#StepOver()<CR>
 nnoremap <F11>         :call vimspector#StepInto()<CR>
 nnoremap Č  :
+nnoremap <silent> <C-K><C-T> :TagbarToggle<CR>
 
 colorscheme nordfox
 
