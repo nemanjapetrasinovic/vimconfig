@@ -69,7 +69,7 @@ vim.keymap.set('n', '<leader>R', ':Telescope live_grep<CR>')
 vim.keymap.set('n', 'gr', ':Ggrep <C-R><C-W><CR>')
 
 -- Tagbar
-vim.keymap.set('n', '<C-K><C-T>', ':TagbarToggle<CR>', { silent = true})
+vim.keymap.set('n', '<C-T>', ':TagbarToggle<CR>', { silent = true})
 
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all" (the five listed parsers should always be installed)
