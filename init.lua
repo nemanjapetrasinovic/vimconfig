@@ -127,3 +127,6 @@ cmp.setup({
 })
 
 require'lualine'.setup()
+
+vim.cmd 'set updatetime=500'
+vim.cmd 'autocmd CursorHold * lua vim.diagnostic.open_float({focus = false})'
