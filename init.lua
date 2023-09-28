@@ -123,10 +123,12 @@ cmp.setup({
     -- Navigate between snippet placeholder
     ['<C-f>'] = cmp_action.luasnip_jump_forward(),
     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+    ['<Tab>'] = cmp.mapping.select_next_item({behavior = 'select'}),
+    ['<S-Tab>'] = cmp.mapping.select_prev_item({behavior = 'select'}),
   }
 })
 
 require'lualine'.setup()
 
-vim.cmd 'set updatetime=500'
+vim.cmd 'set updatetime=300'
 vim.cmd 'autocmd CursorHold * lua vim.diagnostic.open_float({focus = false})'
