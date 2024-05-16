@@ -51,7 +51,8 @@ require("lazy").setup({
       {'hrsh7th/cmp-nvim-lsp'}, -- Required
       {'L3MON4D3/LuaSnip'},     -- Required
     }
-  }
+  },
+  { 'simrat39/rust-tools.nvim', name = 'rust-tools.nvim' }
 })
 
 vim.cmd 'colorscheme rose-pine-moon'
@@ -132,3 +133,17 @@ require'lualine'.setup()
 
 vim.cmd 'set updatetime=300'
 vim.cmd 'autocmd CursorHold * lua vim.diagnostic.open_float({focus = false})'
+require('rust-tools').setup(opts)
+
+-- Vimspector
+vim.cmd([[
+nmap <F8> <cmd>call vimspector#Reset()<cr>
+nmap <F9> <cmd>call vimspector#Launch()<cr>
+nmap <F10> <cmd>call vimspector#StepOver()<cr>")
+nmap <F11> <cmd>call vimspector#StepInto()<cr>")
+nmap <F12> <cmd>call vimspector#StepOut()<cr>")
+nmap "Db" <cmd>call vimspector#ToggleBreakpoint()<cr>")
+]])
+vim.keymap.set('n', 'Db', ':call vimspector#ToggleBreakpoint()<CR>')
+vim.keymap.set('n', 'Dw', ':call vimspector#AddWatch()<CR>')
+vim.keymap.set('n', 'De', ':call vimspector#Evaluate()<CR>')
