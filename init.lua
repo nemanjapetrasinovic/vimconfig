@@ -3,7 +3,7 @@ vim.cmd 'set t_ut='
 vim.cmd 'set termguicolors'
 vim.cmd 'set number'
 vim.cmd 'set list'
-vim.cmd [[set listchars=tab:▸\ ,eol:¬,trail:·]]
+vim.cmd [[set listchars=tab:▸\ ,eol:¬,trail:·,space:·]]
 vim.cmd 'set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab'
 vim.cmd 'set expandtab'
 vim.cmd 'syntax on'
@@ -52,7 +52,9 @@ require("lazy").setup({
       {'L3MON4D3/LuaSnip'},     -- Required
     }
   },
-  { 'simrat39/rust-tools.nvim', name = 'rust-tools.nvim' }
+  {
+    'mrcjkb/rustaceanvim', version = '^4', lazy = false
+  }
 })
 
 require('rose-pine').setup({ disable_italics = true, })
@@ -134,7 +136,6 @@ require'lualine'.setup()
 
 vim.cmd 'set updatetime=300'
 vim.cmd 'autocmd CursorHold * lua vim.diagnostic.open_float({focus = false})'
-require('rust-tools').setup(opts)
 
 -- Vimspector
 vim.cmd([[
