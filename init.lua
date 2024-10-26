@@ -8,7 +8,7 @@ vim.cmd 'set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab'
 vim.cmd 'set expandtab'
 vim.cmd 'syntax on'
 vim.cmd 'set cursorline'
-vim.cmd 'set mouse='
+--vim.cmd 'set mouse='
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -24,37 +24,37 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-  { 'rose-pine/neovim', name = 'rose-pine' },
-  { 'preservim/nerdtree', name = 'nerdtree' },
-  { 'Xuyuanp/nerdtree-git-plugin', name = 'nerdtree-git'},
-  { 'nvim-lualine/lualine.nvim', name = 'lua-line' },
-  { 'kyazdani42/nvim-web-devicons', name = 'nvim-web-devicons' },
-  { 'tpope/vim-fugitive', name = 'vim-fugitive' },
-  { 'nvim-lua/plenary.nvim', name = 'plenary' },
-  { 'nvim-telescope/telescope.nvim', name = 'telescope' },
-  { 'tomtom/tcomment_vim', name = 'tcomment' },
-  { 'puremourning/vimspector', name = 'vimspector' },
-  { 'majutsushi/tagbar', name = 'tagbar' },
-  { 'EdenEast/nightfox.nvim', name = 'nightfox' },
-  { 'nvim-treesitter/nvim-treesitter', name = 'treesitter', build = ":TSUpdate" },
-  {
-    'VonHeikemen/lsp-zero.nvim',
-    branch = 'v2.x',
-    dependencies = {
-      -- LSP Support
-      {'neovim/nvim-lspconfig'},             -- Required
-      {'williamboman/mason.nvim'},           -- Optional
-      {'williamboman/mason-lspconfig.nvim'}, -- Optional
+    { 'rose-pine/neovim', name = 'rose-pine' },
+    { 'preservim/nerdtree', name = 'nerdtree' },
+    { 'Xuyuanp/nerdtree-git-plugin', name = 'nerdtree-git'},
+    { 'nvim-lualine/lualine.nvim', name = 'lua-line' },
+    { 'kyazdani42/nvim-web-devicons', name = 'nvim-web-devicons' },
+    { 'tpope/vim-fugitive', name = 'vim-fugitive' },
+    { 'nvim-lua/plenary.nvim', name = 'plenary' },
+    { 'nvim-telescope/telescope.nvim', name = 'telescope' },
+    { 'tomtom/tcomment_vim', name = 'tcomment' },
+    { 'puremourning/vimspector', name = 'vimspector' },
+    { 'majutsushi/tagbar', name = 'tagbar' },
+    { 'EdenEast/nightfox.nvim', name = 'nightfox' },
+    { 'nvim-treesitter/nvim-treesitter', name = 'treesitter', build = ":TSUpdate" },
+    {
+        'VonHeikemen/lsp-zero.nvim',
+        branch = 'v2.x',
+        dependencies = {
+            -- LSP Support
+            {'neovim/nvim-lspconfig'},             -- Required
+            {'williamboman/mason.nvim'},           -- Optional
+            {'williamboman/mason-lspconfig.nvim'}, -- Optional
 
-      -- Autocompletion
-      {'hrsh7th/nvim-cmp'},     -- Required
-      {'hrsh7th/cmp-nvim-lsp'}, -- Required
-      {'L3MON4D3/LuaSnip'},     -- Required
+            -- Autocompletion
+            {'hrsh7th/nvim-cmp'},     -- Required
+            {'hrsh7th/cmp-nvim-lsp'}, -- Required
+            {'L3MON4D3/LuaSnip'},     -- Required
+        }
+    },
+    {
+        'mrcjkb/rustaceanvim', version = '^4', lazy = false
     }
-  },
-  {
-    'mrcjkb/rustaceanvim', version = '^4', lazy = false
-  }
 })
 
 require('rose-pine').setup({ disable_italics = true, })
@@ -76,28 +76,28 @@ vim.keymap.set('n', 'gr', ':Ggrep <C-R><C-W><CR>')
 vim.keymap.set('n', '<C-T>', ':TagbarToggle<CR>', { silent = true})
 
 require'nvim-treesitter.configs'.setup {
-  -- A list of parser names, or "all" (the five listed parsers should always be installed)
-  ensure_installed = { "c", "lua", "rust", "javascript", "typescript", "vimdoc", "comment" },
+    -- A list of parser names, or "all" (the five listed parsers should always be installed)
+    ensure_installed = { "c", "lua", "rust", "javascript", "typescript", "vimdoc", "comment" },
 
-  -- Install parsers synchronously (only applied to `ensure_installed`)
-  sync_install = false,
+    -- Install parsers synchronously (only applied to `ensure_installed`)
+    sync_install = false,
 
-  -- Automatically install missing parsers when entering buffer
-  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-  auto_install = true,
+    -- Automatically install missing parsers when entering buffer
+    -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+    auto_install = true,
 
-  highlight = {
-    enable = true,
+    highlight = {
+        enable = true,
 
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
-    additional_vim_regex_highlighting = false,
-  },
-  indent = {
-    enable = true
-  }
+        -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+        -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+        -- Using this option may slow down your editor, and you may see some duplicate highlights.
+        -- Instead of true it can also be a list of languages
+        additional_vim_regex_highlighting = false,
+    },
+    indent = {
+        enable = true
+    }
 }
 
 local lsp = require('lsp-zero').preset({})
@@ -132,7 +132,25 @@ cmp.setup({
   }
 })
 
-require'lualine'.setup()
+require'lualine'.setup {
+    sections = {
+        lualine_c = {
+            {
+                'filename',
+                file_status = true,
+                newfile_status = false,
+                path = 1,
+                shorting_target = 40,
+                symbols = {
+                    modified = '[+]',
+                    readonly = '[-]',
+                    unnamed = '[No Name]',
+                    newfile = '[New]',
+                }
+            }
+        }
+    }
+}
 
 vim.cmd 'set updatetime=300'
 vim.cmd 'autocmd CursorHold * lua vim.diagnostic.open_float({focus = false})'
