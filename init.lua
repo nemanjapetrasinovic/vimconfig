@@ -8,18 +8,18 @@ vim.cmd 'set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab'
 vim.cmd 'set expandtab'
 vim.cmd 'syntax on'
 vim.cmd 'set cursorline'
---vim.cmd 'set mouse='
+vim.g.vimspector_base_dir='/Users/nemanja/.local/share/nvim/lazy/vimspector'
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
-    lazypath,
-  })
+    vim.fn.system({
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable", -- latest stable release
+        lazypath,
+    })
 end
 vim.opt.rtp:prepend(lazypath)
 
@@ -54,7 +54,58 @@ require("lazy").setup({
     },
     {
         'mrcjkb/rustaceanvim', version = '^4', lazy = false
-    }
+    },
+    {
+        "Exafunction/codeium.nvim",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "hrsh7th/nvim-cmp",
+        },
+        config = function()
+            require("codeium").setup({
+                -- Optionally disable cmp source if using virtual text only
+                enable_cmp_source = false,
+                virtual_text = {
+                    enabled = true,
+
+                    -- These are the defaults
+
+                    -- Set to true if you never want completions to be shown automatically.
+                    manual = false,
+                    -- A mapping of filetype to true or false, to enable virtual text.
+                    filetypes = {},
+                    -- Whether to enable virtual text of not for filetypes not specifically listed above.
+                    default_filetype_enabled = true,
+                    -- How long to wait (in ms) before requesting completions after typing stops.
+                    idle_delay = 75,
+                    -- Priority of the virtual text. This usually ensures that the completions appear on top of
+                    -- other plugins that also add virtual text, such as LSP inlay hints, but can be modified if
+                    -- desired.
+                    virtual_text_priority = 65535,
+                    -- Set to false to disable all key bindings for managing completions.
+                    map_keys = true,
+                    -- The key to press when hitting the accept keybinding but no completion is showing.
+                    -- Defaults to \t normally or <c-n> when a popup is showing. 
+                    accept_fallback = nil,
+                    -- Key bindings for managing completions in virtual text mode.
+                    key_bindings = {
+                        -- Accept the current completion.
+                        accept = "<Tab>",
+                        -- Accept the next word.
+                        accept_word = false,
+                        -- Accept the next line.
+                        accept_line = false,
+                        -- Clear the virtual text.
+                        clear = false,
+                        -- Cycle to the next completion.
+                        next = "<M-]>",
+                        -- Cycle to the previous completion.
+                        prev = "<M-[>",
+                    }
+                }
+            })
+        end
+    },
 })
 
 require('rose-pine').setup({ disable_italics = true, })
@@ -103,9 +154,9 @@ require'nvim-treesitter.configs'.setup {
 local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
-  -- see :help lsp-zero-keybindings
-  -- to learn the available actions
-  lsp.default_keymaps({buffer = bufnr})
+    -- see :help lsp-zero-keybindings
+    -- to learn the available actions
+    lsp.default_keymaps({buffer = bufnr})
 end)
 
 -- (Optional) Configure lua language server for neovim
@@ -117,20 +168,42 @@ local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
 
 cmp.setup({
-  mapping = {
-    -- `Enter` key to confirm completion
-    ['<CR>'] = cmp.mapping.confirm({select = false}),
+    mapping = {
+        -- `Enter` key to confirm completion
+        ['<CR>'] = cmp.mapping.confirm({select = false}),
 
-    -- Ctrl+Space to trigger completion menu
-    ['<C-Space>'] = cmp.mapping.complete(),
+        -- Ctrl+Space to trigger completion menu
+        ['<C-Space>'] = cmp.mapping.complete(),
 
-    -- Navigate between snippet placeholder
-    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-    ['<Tab>'] = cmp.mapping.select_next_item({behavior = 'select'}),
-    ['<S-Tab>'] = cmp.mapping.select_prev_item({behavior = 'select'}),
-  }
+        -- Navigate between snippet placeholder
+        ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+        ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+        ['<Tab>'] = cmp.mapping.select_next_item({behavior = 'select'}),
+        ['<S-Tab>'] = cmp.mapping.select_prev_item({behavior = 'select'}),
+    }
 })
+
+vim.cmd 'set updatetime=300'
+vim.cmd 'autocmd CursorHold * lua vim.diagnostic.open_float({focus = false})'
+
+-- Vimspector
+vim.cmd([[
+nmap <F8> <cmd>call vimspector#Reset()<cr>
+nmap <F9> <cmd>call vimspector#Launch()<cr>
+nmap <F10> <cmd>call vimspector#StepOver()<cr>")
+nmap <F11> <cmd>call vimspector#StepInto()<cr>")
+nmap <F12> <cmd>call vimspector#StepOut()<cr>")
+nmap "Db" <cmd>call vimspector#ToggleBreakpoint()<cr>")
+]])
+vim.keymap.set('n', 'Db', ':call vimspector#ToggleBreakpoint()<CR>')
+vim.keymap.set('n', 'Dw', ':call vimspector#AddWatch()<CR>')
+vim.keymap.set('n', 'De', ':call vimspector#Evaluate()<CR>')
+
+require('codeium.virtual_text').status_string()
+-- vim.opt.statusline:append(" %3{%v:lua.require'codeium.virtual_text'.status_string()%}")
+require('codeium.virtual_text').set_statusbar_refresh(function()
+    require('lualine').refresh()
+end)
 
 require'lualine'.setup {
     sections = {
@@ -148,22 +221,12 @@ require'lualine'.setup {
                     newfile = '[New]',
                 }
             }
-        }
+        },
+        lualine_x = {
+            'encoding', 'fileformat', 'filetype',
+            function()
+                return require('codeium.virtual_text').status_string()
+            end
+        },
     }
 }
-
-vim.cmd 'set updatetime=300'
-vim.cmd 'autocmd CursorHold * lua vim.diagnostic.open_float({focus = false})'
-
--- Vimspector
-vim.cmd([[
-nmap <F8> <cmd>call vimspector#Reset()<cr>
-nmap <F9> <cmd>call vimspector#Launch()<cr>
-nmap <F10> <cmd>call vimspector#StepOver()<cr>")
-nmap <F11> <cmd>call vimspector#StepInto()<cr>")
-nmap <F12> <cmd>call vimspector#StepOut()<cr>")
-nmap "Db" <cmd>call vimspector#ToggleBreakpoint()<cr>")
-]])
-vim.keymap.set('n', 'Db', ':call vimspector#ToggleBreakpoint()<CR>')
-vim.keymap.set('n', 'Dw', ':call vimspector#AddWatch()<CR>')
-vim.keymap.set('n', 'De', ':call vimspector#Evaluate()<CR>')
