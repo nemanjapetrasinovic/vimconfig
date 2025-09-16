@@ -17,3 +17,11 @@ vim.cmd("set updatetime=300")
 vim.cmd('autocmd CursorHold * lua vim.diagnostic.open_float({focus = false, close_events = { "BufLeave", "CursorMoved", "InsertEnter" }})')
 
 require("config.lazy")
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*.go",
+  callback = function()
+    vim.lsp.buf.format({ async = false })
+  end,
+})
+

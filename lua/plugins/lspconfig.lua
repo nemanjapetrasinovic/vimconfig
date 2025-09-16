@@ -13,6 +13,13 @@ return {
                     vim.api.nvim_buf_set_keymap(bufnr, "n", keys, "", {callback = func, desc = desc, noremap = true, silent = true})
                 end
 
+                vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+                    vim.lsp.diagnostic.on_publish_diagnostics, {
+                        -- true: update diagnostics in insert mode
+                        update_in_insert = true,
+                    }
+                )
+
                 -- Minimal keymaps
                 nmap("gd", vim.lsp.buf.definition, "Go to Definition")
                 nmap("K", vim.lsp.buf.hover, "Hover Documentation")
@@ -45,6 +52,25 @@ return {
                     },
                 },
             })
+
+            local lspconfig = require('lspconfig')
+
+            -- Setup gopls
+            lspconfig.gopls.setup {
+                cmd = {"gopls"},
+                filetypes = {"go", "gomod", "gowork", "gotmpl"},
+                root_dir = lspconfig.util.root_pattern("go.work", "go.mod", ".git"),
+                settings = {
+                    gopls = {
+                        analyses = {
+                            unusedparams = true,
+                            shadow = true,
+                        },
+                        staticcheck = true,
+                    },
+                },
+            }
+
         end
     }
 }
