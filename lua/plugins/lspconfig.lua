@@ -71,6 +71,18 @@ return {
                 },
             }
 
+            require('lspconfig').solidity_ls_nomicfoundation.setup{
+                -- Optional: customize settings
+                settings = {
+                    solidity = {
+                        includePath = '',
+                        remapping = {},
+                    }
+                },
+                -- Optional: specify filetypes if needed
+                filetypes = { 'solidity' },
+            }
+
         end
     }
 }
